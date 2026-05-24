@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Share2, MessageCircle, Send, Loader2, Flower2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../context/AuthContext";
+import { useAlert } from "../../context/AlertContext";
 
 export default function PostCard({ post }) {
   const { user } = useAuth();
-  
+  const { showAlert } = useAlert();
+
   // Like (Lotus) State
   const [likedBy, setLikedBy] = useState(post.liked_by || []);
   const isLiked = user ? likedBy.includes(user.id) : false;
@@ -37,7 +39,7 @@ export default function PostCard({ post }) {
   // ==========================================
   const handleLike = async () => {
     if (!user) {
-      alert("Please log in to like cards!");
+      showAlert("Authentication Required", "Please log in to like cards!", true);
       return;
     }
 
@@ -62,7 +64,7 @@ export default function PostCard({ post }) {
 
   const handleDoubleTap = () => {
     if (!user) {
-      alert("Please log in to like cards!");
+      showAlert("Authentication Required", "Please log in to like cards!", true);
       return;
     }
     
@@ -98,7 +100,7 @@ export default function PostCard({ post }) {
   const submitComment = async (e) => {
     e.preventDefault();
     if (!user) {
-      alert("Please log in to comment!");
+      showAlert("Authentication Required", "Please log in to comment!", true);
       return;
     }
     if (!newComment.trim()) return;
