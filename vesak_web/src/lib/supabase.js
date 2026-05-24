@@ -1,0 +1,11 @@
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+// We changed this line to match your .env file exactly!
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("Missing Supabase environment variables!")
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
