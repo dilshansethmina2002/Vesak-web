@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Home, PlusSquare, User, LogIn } from "lucide-react";
+import { Home, PlusSquare, User, LogIn, Camera } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import LoginModal from "../components/auth/LoginModal";
 
@@ -25,43 +25,71 @@ export default function MainLayout() {
       <div className="max-w-7xl mx-auto flex justify-center xl:justify-between w-full relative z-10">
         
         {/* =========================================
-            1. LEFT COLUMN: DESKTOP SIDEBAR
+            1. LEFT COLUMN: DESKTOP SIDEBAR 
             ========================================= */}
         <aside className="hidden md:flex flex-col w-[280px] h-screen sticky top-0 p-8 shrink-0">
           <Link to="/" className="text-3xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300 mb-12 drop-shadow-md">
             Lumina
           </Link>
           
-          <nav className="flex flex-col gap-4 font-medium text-lg h-full">
+          <nav className="flex flex-col gap-3 font-medium text-lg h-full">
             <Link 
               to="/" 
-              className={`flex items-center gap-4 p-4 rounded-2xl transition-all ${isActive('/') ? 'bg-white/10 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border border-white/10 text-orange-400 font-bold' : 'hover:bg-white/5 hover:backdrop-blur-sm hover:text-orange-400 text-neutral-300'}`}
+              className={`relative flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out group border ${
+                isActive('/') 
+                  ? 'bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] border-white/10 text-orange-400 shadow-[inset_0_1px_4px_rgba(255,255,255,0.1),0_8px_32px_0_rgba(0,0,0,0.36)] translate-x-3' 
+                  : 'border-transparent text-neutral-400 hover:text-white hover:bg-white/[0.03] hover:translate-x-1'
+              }`}
             >
-              <Home className={`w-6 h-6 ${isActive('/') ? 'fill-orange-400/20' : ''}`} /> Feed
+              <Home className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isActive('/') ? 'scale-110 fill-orange-400/20' : 'scale-100 group-hover:scale-110'}`} /> 
+              <span>Feed</span>
             </Link>
             
             <Link 
               to="/create" 
-              className={`flex items-center gap-4 p-4 rounded-2xl transition-all ${isActive('/create') ? 'bg-white/10 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border border-white/10 text-orange-400 font-bold' : 'hover:bg-white/5 hover:backdrop-blur-sm hover:text-orange-400 text-neutral-300'}`}
+              className={`relative flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out group border ${
+                isActive('/create') 
+                  ? 'bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] border-white/10 text-orange-400 shadow-[inset_0_1px_4px_rgba(255,255,255,0.1),0_8px_32px_0_rgba(0,0,0,0.36)] translate-x-3' 
+                  : 'border-transparent text-neutral-400 hover:text-white hover:bg-white/[0.03] hover:translate-x-1'
+              }`}
             >
-              <PlusSquare className={`w-6 h-6 ${isActive('/create') ? 'fill-orange-400/20' : ''}`} /> Create Card
+              <PlusSquare className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isActive('/create') ? 'scale-110 fill-orange-400/20' : 'scale-100 group-hover:scale-110'}`} /> 
+              <span>Create Card</span>
+            </Link>
+
+            <Link 
+              to="/share" 
+              className={`relative flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out group border ${
+                isActive('/share') 
+                  ? 'bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] border-white/10 text-orange-400 shadow-[inset_0_1px_4px_rgba(255,255,255,0.1),0_8px_32px_0_rgba(0,0,0,0.36)] translate-x-3' 
+                  : 'border-transparent text-neutral-400 hover:text-white hover:bg-white/[0.03] hover:translate-x-1'
+              }`}
+            >
+              <Camera className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isActive('/share') ? 'scale-110 fill-orange-400/20' : 'scale-100 group-hover:scale-110'}`} /> 
+              <span>Share Photo</span>
             </Link>
             
             <Link 
               to="/profile" 
-              className={`flex items-center gap-4 p-4 rounded-2xl transition-all ${isActive('/profile') ? 'bg-white/10 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border border-white/10 text-orange-400 font-bold' : 'hover:bg-white/5 hover:backdrop-blur-sm hover:text-orange-400 text-neutral-300'}`}
+              className={`relative flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out group border ${
+                isActive('/profile') 
+                  ? 'bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] border-white/10 text-orange-400 shadow-[inset_0_1px_4px_rgba(255,255,255,0.1),0_8px_32px_0_rgba(0,0,0,0.36)] translate-x-3' 
+                  : 'border-transparent text-neutral-400 hover:text-white hover:bg-white/[0.03] hover:translate-x-1'
+              }`}
             >
-              <User className={`w-6 h-6 ${isActive('/profile') ? 'fill-orange-400/20' : ''}`} /> Profile
+              <User className={`w-6 h-6 shrink-0 transition-transform duration-500 ${isActive('/profile') ? 'scale-110 fill-orange-400/20' : 'scale-100 group-hover:scale-110'}`} /> 
+              <span>Profile</span>
             </Link>
 
-            {/* Desktop Login Button (Pushed to the bottom using mt-auto) */}
+            {/* Desktop Login Button */}
             {!user && (
               <div className="mt-auto pb-4">
                 <button
                   onClick={() => setShowLogin(true)}
-                  className="flex w-full items-center justify-center gap-3 p-4 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-[0_4px_20px_rgba(249,115,22,0.3)] active:scale-95"
+                  className="flex w-full items-center justify-center gap-3 p-4 rounded-2xl bg-orange-500/90 hover:bg-orange-500 text-white font-bold transition-all duration-500 ease-out shadow-[0_4px_20px_rgba(249,115,22,0.3)] hover:shadow-[0_8px_30px_rgba(249,115,22,0.5)] hover:-translate-y-1 active:scale-95 active:translate-y-0"
                 >
-                  <LogIn className="w-5 h-5" /> Sign In
+                  <LogIn className="w-5 h-5 shrink-0" /> 
+                  <span>Sign In</span>
                 </button>
               </div>
             )}
@@ -69,15 +97,16 @@ export default function MainLayout() {
         </aside>
 
         {/* =========================================
-            2. CENTER COLUMN: MAIN SCROLLABLE CONTENT
+            2. CENTER COLUMN: THE MAIN GLASS PANE
             ========================================= */}
-        <main className="flex-1 max-w-xl w-full pb-20 md:pb-0 min-h-screen md:bg-white/[0.02] md:backdrop-blur-3xl md:border-x md:border-white/10 md:shadow-2xl relative">
+        <main className="flex-1 max-w-xl w-full pb-24 md:pb-0 md:my-6 md:min-h-[calc(100vh-3rem)] md:bg-white/[0.04] md:backdrop-blur-[40px] md:saturate-[1.5] md:border md:border-white/10 md:rounded-3xl md:shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] relative transition-all duration-700 ease-out md:hover:bg-white/[0.06] md:hover:shadow-[0_16px_64px_0_rgba(249,115,22,0.1)] flex flex-col group overflow-hidden">
           
-          {/* Mobile Header (Now includes a Sign In pill!) */}
-          <header className="md:hidden flex items-center justify-between p-4 border-b border-white/10 sticky top-0 bg-black/40 backdrop-blur-2xl saturate-150 z-40">
+          <div className="hidden md:block absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out" />
+
+          {/* Mobile Header */}
+          <header className="md:hidden flex items-center justify-between p-4 border-b border-white/10 sticky top-0 bg-black/40 backdrop-blur-[40px] saturate-200 z-40">
             <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300">Lumina</h1>
             
-            {/* Mobile Login Button */}
             {!user && (
               <button
                 onClick={() => setShowLogin(true)}
@@ -88,7 +117,7 @@ export default function MainLayout() {
             )}
           </header>
 
-          <div className="p-4 md:p-6">
+          <div className="p-4 md:p-6 flex-1 w-full animate-in fade-in zoom-in-[0.98] duration-700 ease-out">
             <Outlet /> 
           </div>
         </main>
@@ -119,21 +148,76 @@ export default function MainLayout() {
       </div>
 
       {/* =========================================
-          MOBILE BOTTOM NAV
+          MOBILE BOTTOM NAV 
           ========================================= */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-white/10 bg-black/40 backdrop-blur-2xl saturate-150 flex justify-around items-center p-4 z-50 pb-safe">
-        <Link to="/" className={`flex flex-col items-center gap-1 transition-colors ${isActive('/') ? 'text-orange-400' : 'text-neutral-400 hover:text-white'}`}>
-          <Home className={`w-6 h-6 ${isActive('/') ? 'fill-orange-400/20' : ''}`} />
-        </Link>
-        <Link to="/create" className={`flex flex-col items-center gap-1 transition-colors ${isActive('/create') ? 'text-orange-400' : 'text-neutral-400 hover:text-white'}`}>
-          <PlusSquare className={`w-6 h-6 ${isActive('/create') ? 'fill-orange-400/20' : ''}`} />
-        </Link>
-        <Link to="/profile" className={`flex flex-col items-center gap-1 transition-colors ${isActive('/profile') ? 'text-orange-400' : 'text-neutral-400 hover:text-white'}`}>
-          <User className={`w-6 h-6 ${isActive('/profile') ? 'fill-orange-400/20' : ''}`} />
-        </Link>
-      </nav>
+      <div className="md:hidden fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+        
+        <div className="absolute inset-0 top-6 mx-auto w-[280px] h-[50px] bg-orange-500/20 blur-2xl rounded-full pointer-events-none" />
 
-      {/* Global Login Modal injected here! */}
+        {/* Note: I increased max-w-[340px] to max-w-[380px] to comfortably fit all 4 icons */}
+        <nav className="relative flex items-center justify-between w-full max-w-[380px] bg-white/[0.05] backdrop-blur-[40px] saturate-[2.5] border border-white/10 rounded-full p-2 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] pointer-events-auto">
+          
+          <Link 
+            to="/" 
+            className={`relative flex items-center justify-center px-4 py-3 rounded-full transition-all duration-500 ease-out ${
+              isActive('/') ? 'bg-white/10 text-orange-400 shadow-[inset_0_1px_4px_rgba(255,255,255,0.1)]' : 'text-neutral-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <Home className={`w-5 h-5 shrink-0 transition-transform duration-500 ${isActive('/') ? 'scale-110 fill-orange-400/20' : 'scale-100'}`} />
+            <span className={`font-semibold text-sm whitespace-nowrap overflow-hidden transition-all duration-500 ease-out ${
+              isActive('/') ? 'max-w-[60px] ml-2 opacity-100' : 'max-w-0 ml-0 opacity-0'
+            }`}>
+              Feed
+            </span>
+          </Link>
+
+          <Link 
+            to="/create" 
+            className={`relative flex items-center justify-center px-4 py-3 rounded-full transition-all duration-500 ease-out ${
+              isActive('/create') ? 'bg-white/10 text-orange-400 shadow-[inset_0_1px_4px_rgba(255,255,255,0.1)]' : 'text-neutral-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <PlusSquare className={`w-5 h-5 shrink-0 transition-transform duration-500 ${isActive('/create') ? 'scale-110 fill-orange-400/20' : 'scale-100'}`} />
+            <span className={`font-semibold text-sm whitespace-nowrap overflow-hidden transition-all duration-500 ease-out ${
+              isActive('/create') ? 'max-w-[60px] ml-2 opacity-100' : 'max-w-0 ml-0 opacity-0'
+            }`}>
+              Card
+            </span>
+          </Link>
+
+          {/* New Share Photo Link */}
+          <Link 
+            to="/share" 
+            className={`relative flex items-center justify-center px-4 py-3 rounded-full transition-all duration-500 ease-out ${
+              isActive('/share') ? 'bg-white/10 text-orange-400 shadow-[inset_0_1px_4px_rgba(255,255,255,0.1)]' : 'text-neutral-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <Camera className={`w-5 h-5 shrink-0 transition-transform duration-500 ${isActive('/share') ? 'scale-110 fill-orange-400/20' : 'scale-100'}`} />
+            <span className={`font-semibold text-sm whitespace-nowrap overflow-hidden transition-all duration-500 ease-out ${
+              isActive('/share') ? 'max-w-[60px] ml-2 opacity-100' : 'max-w-0 ml-0 opacity-0'
+            }`}>
+              Photo
+            </span>
+          </Link>
+
+          <Link 
+            to="/profile" 
+            className={`relative flex items-center justify-center px-4 py-3 rounded-full transition-all duration-500 ease-out ${
+              isActive('/profile') ? 'bg-white/10 text-orange-400 shadow-[inset_0_1px_4px_rgba(255,255,255,0.1)]' : 'text-neutral-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <User className={`w-5 h-5 shrink-0 transition-transform duration-500 ${isActive('/profile') ? 'scale-110 fill-orange-400/20' : 'scale-100'}`} />
+            <span className={`font-semibold text-sm whitespace-nowrap overflow-hidden transition-all duration-500 ease-out ${
+              isActive('/profile') ? 'max-w-[60px] ml-2 opacity-100' : 'max-w-0 ml-0 opacity-0'
+            }`}>
+              Profile
+            </span>
+          </Link>
+
+        </nav>
+      </div>
+      
+      {/* Required for the LogIn button to function globally! */}
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
 
     </div>
