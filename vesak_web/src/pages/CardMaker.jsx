@@ -9,6 +9,31 @@ const TEMPLATES = [
   "/cards/vesak1.png", 
   "/cards/vesak2.png",
   "/cards/vesak3.png",
+  "/cards/vesak4.png",
+  "/cards/vesak5.png",
+  "/cards/vesak6.png", 
+  "/cards/vesak7.png",
+  "/cards/vesak8.png",
+  "/cards/vesak9.png",
+  "/cards/vesak10.png",
+  "/cards/vesak11.png", 
+  "/cards/vesak12.png",
+  "/cards/vesak13.png",
+  "/cards/vesak14.png",
+  "/cards/vesak15.png",
+  "/cards/vesak16.png", 
+  "/cards/vesak17.png",
+  "/cards/vesak18.png",
+  "/cards/vesak19.png",
+  "/cards/vesak20.png",
+  "/cards/vesak21.png", 
+  "/cards/vesak22.png",
+  "/cards/vesak23.png", 
+  "/cards/vesak24.png",
+  "/cards/vesak25.png",
+  "/cards/vesak26.png", 
+  "/cards/vesak27.png",
+  "/cards/vesak28.png"
 ];
 
 const PRESET_MESSAGES = [
@@ -93,19 +118,20 @@ export default function CardMaker() {
           ========================================= */}
       <div className="flex flex-col gap-5 bg-neutral-900/50 backdrop-blur-md p-5 rounded-2xl border border-white/5">
         
-        {/* Template Selector */}
+       {/* Template Selector */}
         <div>
           <label className="text-sm text-neutral-400 font-medium flex items-center gap-2 mb-3">
             <ImageIcon className="w-4 h-4" /> Pick a Design
           </label>
-          {/* Horizontal scroll for thumbnails */}
-          <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+          
+          {/* Upgraded to a vertically scrolling grid! */}
+          <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 max-h-[180px] overflow-y-auto pr-2 pb-2">
             {TEMPLATES.map((bgPath, idx) => (
               <button
                 key={idx}
                 onClick={() => setSelectedBg(bgPath)}
-                className={`w-16 h-16 rounded-xl shrink-0 overflow-hidden border-2 transition-all ${
-                  selectedBg === bgPath ? "border-orange-500 scale-105" : "border-transparent opacity-60 hover:opacity-100"
+                className={`w-full aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                  selectedBg === bgPath ? "border-orange-500 scale-105 shadow-[0_0_15px_rgba(249,115,22,0.4)] z-10" : "border-transparent opacity-60 hover:opacity-100"
                 }`}
               >
                 <img src={bgPath} alt={`Template ${idx}`} className="w-full h-full object-cover bg-neutral-800" />
