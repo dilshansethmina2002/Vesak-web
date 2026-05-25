@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Share2, MessageCircle, Send, Loader2, Flower2 } from "lucide-react";
+import { Share2, MessageCircle, Send, Loader2, Flower2 , Trash2} from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../context/AuthContext";
 import { useAlert } from "../../context/AlertContext";
 
-export default function PostCard({ post }) {
+export default function PostCard({ post , onDelete }) {
   const { user } = useAuth();
   const { showAlert } = useAlert();
 
@@ -138,24 +138,66 @@ export default function PostCard({ post }) {
     window.open(`https://wa.me/?text=${text}`, '_blank');
   };
 
+
+  const handleDelete = async () => {
+    // 1. Confirm they actually want to delete it
+    const isConfirmed = window.confirm("Are you sure you want to delete this post? This cannot be undone.");
+    if (!isConfirmed) return;
+
+    try {
+      // 2. Delete from Supabase
+      const { error } = await supabase
+        .from("vesak_cards")
+        .delete()
+        .eq("id", post.id)
+        .eq("user_id", user.id); // Extra security check
+
+      if (error) throw error;
+
+      // 3. Tell the UI to remove it instantly
+      if (onDelete) {
+        onDelete(post.id);
+      } else {
+        window.location.reload(); // Fallback if onDelete isn't provided
+      }
+      
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      showAlert("Delete Failed", "We could not delete this post right now.");
+    }
+  };
+
   return (
     <div className="bg-neutral-900/50 border border-white/10 rounded-2xl overflow-hidden mb-8 shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-500">
       
+      
+
       {/* 1. Header */}
       <div className="p-4 flex items-center gap-3">
-        <div className="w-10 h-10 bg-gradient-to-tr from-orange-500 to-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+        <div className="w-10 h-10 bg-gradient-to-tr from-orange-500 to-yellow-400 rounded-full flex items-center justify-center shadow-lg shrink-0">
           <span className="text-white font-bold text-lg">
             {(post.author_name || "A").charAt(0).toUpperCase()}
           </span>
         </div>
-        <div>
-          <h3 className="text-white font-medium text-sm">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-white font-medium text-sm truncate">
             {post.author_name || "Anonymous Soul"}
           </h3>
           <p className="text-neutral-500 text-xs">
             {new Date(post.created_at).toLocaleDateString()}
           </p>
         </div>
+        
+        {/* Delete Button (Only shows if they own the post) */}
+        {user?.id === post.user_id && (
+          <button 
+            onClick={handleDelete}
+            className="p-2 text-neutral-500 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors shrink-0"
+            title="Delete Post"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* 2. The Card (With Double Tap) */}

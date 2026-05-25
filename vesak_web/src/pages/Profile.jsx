@@ -85,6 +85,11 @@ export default function Profile() {
     }
   };
 
+  const handlePostDeleted = (deletedPostId) => {
+    // Instantly filter out the deleted post from the screen
+    setMyCards((prev) => prev.filter((card) => card.id !== deletedPostId));
+  };
+
   // =========================================
   // GUEST VIEW (Not Logged In)
   // =========================================

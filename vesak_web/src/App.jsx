@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import CardMaker from "./pages/CardMaker";
 import Profile from "./pages/Profile";
 import CreatePost from './pages/CreatePost';
+import ViewCard from './pages/ViewCard';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="create" element={<CardMaker />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="/share" element={<CreatePost />} />
+          <Route path="share" element={<CreatePost />} />
+          <Route path="cards/:id" element={<ViewCard />} />
         </Route>
       </Routes>
     </BrowserRouter>
