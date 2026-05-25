@@ -5,29 +5,38 @@ const AlertContext = createContext();
 
 export function AlertProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [alertData, setAlertData] = useState({ title: "", description: "", showLoginBtn: false });
+  const [alertData, setAlertData] = useState({ 
+    title: "", 
+    description: "", 
+    showLoginBtn: false,
+    onConfirm: null, 
+    confirmText: "Okay"
+  });
   
-  // State to handle popping open the Login Modal from inside the alert
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  // We added a 3rd parameter: showLoginBtn (defaults to false)
-  const showAlert = (title, description, showLoginBtn = false) => {
-    setAlertData({ title, description, showLoginBtn });
+  // Upgraded signature to accept an onConfirm function and custom text
+  const showAlert = (title, description, showLoginBtn = false, onConfirm = null, confirmText = "Okay") => {
+    setAlertData({ title, description, showLoginBtn, onConfirm, confirmText });
     setIsOpen(true);
   };
 
   const handleLoginClick = () => {
-    setIsOpen(false); // Hide the alert
-    setShowLoginModal(true); // Pop the login modal!
+    setIsOpen(false); 
+    setShowLoginModal(true); 
+  };
+
+  const handleConfirmClick = () => {
+    setIsOpen(false);
+    if (alertData.onConfirm) {
+      alertData.onConfirm();
+    }
   };
 
   return (
     <AlertContext.Provider value={{ showAlert }}>
       {children}
 
-      {/* =========================================
-          CUSTOM GLASSMORPHISM ALERT MODAL
-          ========================================= */}
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           
@@ -42,27 +51,31 @@ export function AlertProvider({ children }) {
             </p>
             
             <div className="flex justify-end gap-3">
-              {/* If showLoginBtn is true, show Cancel + Sign In. Otherwise, just show Okay. */}
+              {/* 1. Login Mode */}
               {alertData.showLoginBtn ? (
                 <>
-                  <button 
-                    onClick={() => setIsOpen(false)}
-                    className="text-neutral-400 hover:text-white font-medium px-4 py-2.5 transition-colors active:scale-95"
-                  >
+                  <button onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-white font-medium px-4 py-2.5 transition-colors active:scale-95">
                     Cancel
                   </button>
-                  <button 
-                    onClick={handleLoginClick}
-                    className="bg-orange-500/90 hover:bg-orange-500 text-white font-medium px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-orange-500/20 active:scale-95"
-                  >
+                  <button onClick={handleLoginClick} className="bg-orange-500/90 hover:bg-orange-500 text-white font-medium px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-orange-500/20 active:scale-95">
                     Sign In
                   </button>
                 </>
-              ) : (
-                <button 
-                  onClick={() => setIsOpen(false)}
-                  className="bg-orange-500/90 hover:bg-orange-500 text-white font-medium px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-orange-500/20 active:scale-95"
-                >
+              ) : 
+              /* 2. Confirmation Mode (e.g., Deleting) */
+              alertData.onConfirm ? (
+                <>
+                  <button onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-white font-medium px-4 py-2.5 transition-colors active:scale-95">
+                    Cancel
+                  </button>
+                  <button onClick={handleConfirmClick} className="bg-red-500/90 hover:bg-red-600 text-white font-medium px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-red-500/20 active:scale-95">
+                    {alertData.confirmText}
+                  </button>
+                </>
+              ) : 
+              /* 3. Standard Alert Mode */
+              (
+                <button onClick={() => setIsOpen(false)} className="bg-orange-500/90 hover:bg-orange-500 text-white font-medium px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-orange-500/20 active:scale-95">
                   Okay
                 </button>
               )}
@@ -72,9 +85,7 @@ export function AlertProvider({ children }) {
         </div>
       )}
 
-      {/* Inject the LoginModal so the AlertContext can trigger it globally */}
       <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
-
     </AlertContext.Provider>
   );
 }
