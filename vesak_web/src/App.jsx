@@ -15,7 +15,7 @@ function App() {
           <Route path="create" element={<CardMaker />} />
           <Route path="profile" element={<Profile />} />
           <Route path="share" element={<CreatePost />} />
-          <Route path="cards/:id" element={<ViewCard />} />
+          <Route path="card/:id" element={<ViewCard />} />
         </Route>
       </Routes>
     </BrowserRouter>
