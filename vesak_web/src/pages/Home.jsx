@@ -14,6 +14,7 @@ export default function Home() {
         const { data, error } = await supabase
           .from("vesak_cards")
           .select("*")
+          .eq("is_public", true)
           .order("created_at", { ascending: false });
 
         if (error) throw error;

@@ -207,9 +207,28 @@ export default function PostCard({ post, onDelete }) {
         onClick={() => setIsFlipped(!isFlipped)}
         onDoubleClick={handleDoubleTap}
       >
-        {/* Flip Indicator */}
-        <div className="absolute top-4 right-4 z-40 bg-black/40 backdrop-blur-md p-2 rounded-full shadow-xl text-white opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none">
-          <RotateCw className="w-4 h-4" />
+       {/* Ultra-Glass Animated Tap Indicator */}
+        <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 pointer-events-none ${
+          isFlipped ? 'opacity-0 translate-y-4 scale-95' : 'opacity-100 translate-y-0 scale-100'
+        }`}>
+          
+          {/* Subtle ambient glow behind the glass */}
+          <div className="absolute inset-0 bg-orange-500/20 blur-xl rounded-full pointer-events-none" />
+          
+          {/* The true glassmorphism pill */}
+          <div className="relative flex items-center gap-3 bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] px-6 py-3 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36),inset_0_1px_2px_rgba(255,255,255,0.2)] border border-white/10">
+            
+            {/* The giant radar ping */}
+            <div className="relative flex items-center justify-center">
+              <span className="absolute inline-flex w-10 h-10 rounded-full bg-orange-500 opacity-40 animate-ping" />
+              <RotateCw className="relative inline-flex w-5 h-5 text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+            </div>
+            
+            <span className="text-sm font-bold tracking-widest text-white uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              Tap to Flip
+            </span>
+
+          </div>
         </div>
 
         {/* Lotus Animation Container (Sits outside the flip so it always stays visible) */}
