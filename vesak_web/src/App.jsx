@@ -6,11 +6,13 @@ import Profile from "./pages/Profile";
 import CreatePost from './pages/CreatePost';
 import ViewCard from './pages/ViewCard';
 import VesakZone from "./pages/VesakZone";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="admin" element={<AdminDashboard  />} />
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="create" element={<CardMaker />} />
