@@ -30,17 +30,20 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto pb-20">
+    // 👇 We added the smooth animation classes right here on the main wrapper!
+    <div className="max-w-md mx-auto pb-20 animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out fill-mode-both">
       
       {/* Page Header */}
       <div className="mb-6 mt-2 px-2">
-        <h2 className="text-2xl font-bold text-white">Global Lightstream</h2>
+        <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300">
+          Global Lightstream
+        </h2>
         <p className="text-neutral-400 text-sm mt-1">See the wishes created around the world.</p>
       </div>
 
       {/* Loading State */}
       {loading && (
-        <div className="flex flex-col items-center justify-center py-20 text-orange-500 gap-3">
+        <div className="flex flex-col items-center justify-center py-32 text-orange-500 gap-4 animate-in fade-in duration-500">
           <Loader2 className="w-8 h-8 animate-spin" />
           <p className="text-sm font-medium text-neutral-400">Loading cards...</p>
         </div>
@@ -48,7 +51,7 @@ export default function Home() {
 
       {/* Empty State */}
       {!loading && posts.length === 0 && (
-        <div className="text-center py-20 border border-white/5 rounded-2xl bg-neutral-900/30 px-6">
+        <div className="text-center py-20 border border-white/5 rounded-3xl bg-neutral-900/30 px-6 backdrop-blur-sm animate-in fade-in zoom-in-95 duration-500">
           <h3 className="text-lg font-medium text-white mb-2">No cards yet</h3>
           <p className="text-neutral-400 text-sm">Be the first to create and share a beautiful Vesak greeting!</p>
         </div>
@@ -56,7 +59,7 @@ export default function Home() {
 
       {/* The Feed */}
       {!loading && posts.length > 0 && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-6">
           {posts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}

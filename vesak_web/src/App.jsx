@@ -5,6 +5,7 @@ import CardMaker from "./pages/CardMaker";
 import Profile from "./pages/Profile";
 import CreatePost from './pages/CreatePost';
 import ViewCard from './pages/ViewCard';
+import VesakZone from "./pages/VesakZone";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="create" element={<CardMaker />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="zone" element={<VesakZone />} />
           <Route path="share" element={<CreatePost />} />
           <Route path="card/:id" element={<ViewCard />} />
         </Route>
