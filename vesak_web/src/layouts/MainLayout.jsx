@@ -95,7 +95,7 @@ export default function MainLayout() {
 
           {/* Mobile Header (Profile moved to Top Right) */}
           <header className="md:hidden flex items-center justify-between p-4 border-b border-white/10 sticky top-0 bg-black/40 backdrop-blur-[40px] saturate-200 z-40">
-            <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300">Lumina</h1>
+            <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300">Sandakada</h1>
             
             {user ? (
               <Link to="/profile" className="flex items-center gap-2">
@@ -147,7 +147,7 @@ export default function MainLayout() {
                 className="flex w-full items-center justify-center gap-3 p-4 rounded-3xl bg-orange-500/90 hover:bg-orange-500 text-white font-bold transition-all duration-500 ease-out shadow-[0_4px_20px_rgba(249,115,22,0.3)] hover:shadow-[0_8px_30px_rgba(249,115,22,0.5)] active:scale-95"
               >
                 <LogIn className="w-5 h-5 shrink-0" /> 
-                <span>Sign In to Lumina</span>
+                <span>Sign In to Sandakada</span>
               </button>
             </div>
           )}
@@ -156,7 +156,7 @@ export default function MainLayout() {
           <div className="bg-white/[0.03] backdrop-blur-2xl saturate-150 border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
             <h3 className="text-lg font-bold text-white mb-2 relative z-10">Spread the Light</h3>
             <p className="text-sm text-neutral-300 leading-relaxed mb-6 relative z-10">
-              Vesak marks the birth, enlightenment, and passing of the Buddha. Create a digital greeting to share peace and joy with your loved ones.
+              Sandakada marks the birth, enlightenment, and passing of the Buddha. Create a digital greeting to share peace and joy with your loved ones.
             </p>
             
             <Link 
@@ -167,8 +167,13 @@ export default function MainLayout() {
             </Link>
           </div>
 
-          <div className="mt-8 text-xs text-neutral-500 px-4">
-            <p>© 2026 Vesak Lumina. Built with React & Supabase.</p>
+          <div className="text-center mt-8 space-y-1">
+            <p className="text-sm font-medium text-neutral-400">
+              © {new Date().getFullYear()} Sandakada. All rights reserved.
+            </p>
+            <p className="text-xs text-neutral-600">
+              Developed by <span className="font-bold">Sethmina</span> • CodeCraft
+            </p>
           </div>
         </aside>
 
