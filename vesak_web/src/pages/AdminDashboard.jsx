@@ -62,9 +62,22 @@ export default function AdminDashboard() {
     if (!window.confirm("Are you sure you want to permanently delete this card?")) return;
 
     try {
-      const { error } = await supabase.from("vesak_cards").delete().eq("id", id);
+      // 1. We added .select() to force Supabase to confirm the deletion
+      const { data, error } = await supabase
+        .from("vesak_cards")
+        .delete()
+        .eq("id", id)
+        .select(); 
+
       if (error) throw error;
       
+      // 2. Catch the "Silent Fail" if RLS blocks the deletion
+      if (!data || data.length === 0) {
+        showAlert("Access Denied", "Database blocked deletion. Check your Supabase RLS policies.");
+        return; // Stop here, do not remove it from the screen!
+      }
+      
+      // 3. Only remove from screen if the database confirms it's gone
       setCards(cards.filter(card => card.id !== id));
       showAlert("Deleted", "The card has been removed from the platform.");
     } catch (error) {
@@ -72,7 +85,6 @@ export default function AdminDashboard() {
       showAlert("Error", "Failed to delete the card.");
     }
   };
-
   const filteredCards = useMemo(() => {
     return cards
       .filter((card) => {

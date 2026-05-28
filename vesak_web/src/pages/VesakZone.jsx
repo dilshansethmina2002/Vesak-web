@@ -20,7 +20,7 @@ export default function VesakZone() {
         </p>
       </motion.div>
 
-      {/* ─── Iframe Container ─── */}
+      {/* ─── Iframe Container (Larger & Longer) ─── */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -28,11 +28,12 @@ export default function VesakZone() {
         onViewportLeave={() => window.dispatchEvent(new Event("resume-bgm"))}
         viewport={{ once: false, amount: 0.4 }} 
         transition={{ duration: 1, delay: 0.2 }}
-        className="relative aspect-video w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-black/50 shadow-[0_0_40px_rgba(250,204,21,0.15)]"
+        // Removed aspect-video, added fixed height for vertical length
+        className="relative w-full max-w-3xl h-[600px] md:h-[750px] overflow-hidden rounded-2xl border border-white/10 bg-black/50 shadow-[0_0_40px_rgba(250,204,21,0.15)]"
       >
         
         {/* Loading Spinner */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950/80 backdrop-blur-md">
+        <div className="absolute inset-0 z-0 flex flex-col items-center justify-center bg-neutral-950/80 backdrop-blur-md">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
           <p className="mt-4 animate-pulse text-xs text-orange-400 sm:text-sm font-medium">
             තොරණ Load වෙමින් පවතී...

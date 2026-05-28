@@ -25,7 +25,6 @@ export default function Profile() {
       return;
     }
 
-    // Set the input field to their current name when they log in
     setNewName(currentName);
 
     async function fetchMyCards() {
@@ -53,28 +52,36 @@ export default function Profile() {
   };
 
   const handleUpdateName = async () => {
-    if (!newName.trim() || newName === currentName) {
+    const trimmedName = newName.trim();
+    
+    // Validation
+    if (!trimmedName || trimmedName === currentName) {
       setIsEditingName(false);
+      return;
+    }
+    
+    if (trimmedName.length > 24) {
+      alert("Name is too long! Please keep it under 24 characters.");
       return;
     }
 
     setIsSavingName(true);
     try {
-      // 1. Update their official Supabase Auth metadata
+      // 1. Update Supabase Auth metadata
       const { error: authError } = await supabase.auth.updateUser({
-        data: { full_name: newName }
+        data: { full_name: trimmedName }
       });
       if (authError) throw authError;
 
-      // 2. Update the author_name on all of their past cards!
+      // 2. Update author_name on all past cards
       const { error: dbError } = await supabase
         .from('vesak_cards')
-        .update({ author_name: newName })
+        .update({ author_name: trimmedName })
         .eq('user_id', user.id);
       if (dbError) throw dbError;
 
-      // 3. Update the local UI instantly so we don't have to refresh
-      setMyCards(prev => prev.map(card => ({ ...card, author_name: newName })));
+      // 3. Update UI
+      setMyCards(prev => prev.map(card => ({ ...card, author_name: trimmedName })));
       setIsEditingName(false);
       
     } catch (error) {
@@ -85,14 +92,6 @@ export default function Profile() {
     }
   };
 
-  const handlePostDeleted = (deletedPostId) => {
-    // Instantly filter out the deleted post from the screen
-    setMyCards((prev) => prev.filter((card) => card.id !== deletedPostId));
-  };
-
-  // =========================================
-  // GUEST VIEW (Not Logged In)
-  // =========================================
   if (!user) {
     return (
       <div className="max-w-md mx-auto flex flex-col items-center justify-center py-32 px-4 text-center animate-in fade-in">
@@ -114,9 +113,6 @@ export default function Profile() {
     );
   }
 
-  // =========================================
-  // LOGGED IN VIEW
-  // =========================================
   return (
     <div className="max-w-md mx-auto pb-20 animate-in fade-in">
       
@@ -133,20 +129,26 @@ export default function Profile() {
           <div className="flex-1 min-w-0">
             {isEditingName ? (
               // EDIT MODE
-              <div className="flex items-center gap-2 mb-1">
-                <input 
-                  type="text" 
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  className="w-full bg-neutral-950 border border-orange-500 rounded-lg px-2 py-1 text-white text-sm focus:outline-none"
-                  autoFocus
-                />
-                <button onClick={handleUpdateName} disabled={isSavingName} className="p-1.5 bg-green-500/20 text-green-500 rounded-lg hover:bg-green-500 hover:text-white transition-colors">
-                  {isSavingName ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-                </button>
-                <button onClick={() => setIsEditingName(false)} disabled={isSavingName} className="p-1.5 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors">
-                  <CloseIcon className="w-4 h-4" />
-                </button>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="text" 
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    maxLength={24}
+                    className="w-full bg-neutral-950 border border-orange-500 rounded-lg px-2 py-1 text-white text-sm focus:outline-none"
+                    autoFocus
+                  />
+                  <button onClick={handleUpdateName} disabled={isSavingName} className="p-1.5 bg-green-500/20 text-green-500 rounded-lg hover:bg-green-500 hover:text-white transition-colors">
+                    {isSavingName ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                  </button>
+                  <button onClick={() => setIsEditingName(false)} disabled={isSavingName} className="p-1.5 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors">
+                    <CloseIcon className="w-4 h-4" />
+                  </button>
+                </div>
+                <span className={`text-[10px] text-right ${newName.length >= 24 ? 'text-red-500' : 'text-neutral-500'}`}>
+                  {newName.length}/24 characters
+                </span>
               </div>
             ) : (
               // VIEW MODE

@@ -28,7 +28,7 @@ export default function MainLayout() {
             ========================================= */}
         <aside className="hidden md:flex flex-col w-[280px] h-screen sticky top-0 p-8 shrink-0">
           <Link to="/" className="text-3xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300 mb-12 drop-shadow-md">
-            Lumina
+            Sandakada
           </Link>
           
           <nav className="flex flex-col gap-3 font-medium text-lg h-full">
