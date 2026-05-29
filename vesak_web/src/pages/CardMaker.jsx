@@ -44,14 +44,28 @@ const SINHALA_WISHES = [
   "දහම් අමා වැස්සෙන් සිත් සතන් නිවී සැනසෙන, කරුණාව හා මෛත්‍රිය පිරුණු පිංබර වෙසක් මංගල්‍යයක් වේවා."
 ];
 
-const TEMPLATES = [
-  "/cards/vesak9.png", "/cards/vesak12.png", "/cards/vesak13.png", "/cards/vesak8.png",
-  "/cards/vesak5.png", "/cards/vesak10.png", "/cards/vesak11.png", "/cards/vesak6.png",
-  "/cards/vesak7.png", "/cards/vesak14.png", "/cards/vesak15.png", "/cards/vesak16.png",
-  "/cards/vesak17.png", "/cards/vesak18.png", "/cards/vesak19.png", "/cards/vesak20.png",
-  "/cards/vesak21.png", "/cards/vesak22.png", "/cards/vesak23.png", "/cards/vesak24.png",
-  "/cards/vesak25.png", "/cards/vesak26.png", "/cards/vesak27.png", "/cards/vesak28.png"
+// ==========================================
+// SHUFFLE ALGORITHM FOR TEMPLATES
+// ==========================================
+const RAW_TEMPLATES = [
+  "/cards/vesak9.webp", "/cards/vesak12.webp", "/cards/vesak13.webp", "/cards/vesak8.webp",
+  "/cards/vesak5.webp", "/cards/vesak10.webp", "/cards/vesak11.webp", "/cards/vesak6.webp",
+  "/cards/vesak7.webp", "/cards/vesak14.webp", "/cards/vesak15.webp", "/cards/vesak16.webp", "/cards/vesak18.webp", "/cards/vesak19.webp", "/cards/vesak20.webp",
+  "/cards/vesak21.webp", "/cards/vesak22.webp", "/cards/vesak23.webp", "/cards/vesak24.webp",
+  "/cards/vesak25.webp", "/cards/vesak26.webp", "/cards/vesak27.webp", "/cards/vesak28.webp"
 ];
+
+const shuffleArray = (array) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+// This ensures a fresh order every time the component loads
+const TEMPLATES = shuffleArray(RAW_TEMPLATES);
 
 export default function CardMaker() {
   const { user } = useAuth();
@@ -145,16 +159,7 @@ export default function CardMaker() {
 
     const cardUrl = `${window.location.origin}/card/${savedCard.id}`;
     const shareTitle = `Vesak Greeting from ${savedCard.from_name}`;
-    const shareText = `සුබ වෙසක් මංගලයක් වේවා ${toName}! 🪷
-
-      තැපෑලෙන් එන වෙසක් කාඩ් එකක සුවඳ දැන් නැති වුණත්, ඒ සුන්දරත්වය අලුත්ම විදිහකට ඔයාට ගේන්න මම හිතුවා... 🥺
-      මේක ඩිජිටල් වුණත්, මගේ සුබ පැතුම නම් හදවතින්මයි! ✨
-
-      Happy Vesak, ${toName}! 🌕
-      Wishing you joy, peace, and good health! 🙏
-
-      මගේ ඩිජිටල් වෙසක් කාඩ් එක බලන්න පහළ ලින්ක් එක open කරන්න 👇:
-      Click the link below:`;
+    const shareText = `සුබ වෙසක් මංගලයක් වේවා ${toName}! 🪷\n\nතැපෑලෙන් එන වෙසක් කාඩ් එකක සුවඳ දැන් නැති වුණත්, ඒ සුන්දරත්වය අලුත්ම විදිහකට ඔයාට ගේන්න මම හිතුවා... 🥺\nමේක ඩිජිටල් වුණත්, මගේ සුබ පැතුම නම් හදවතින්මයි! ✨\n\nHappy Vesak, ${toName}! 🌕\nWishing you joy, peace, and good health! 🙏\n\nමගේ ඩිජිටල් වෙසක් කාඩ් එක බලන්න පහළ ලින්ක් එක open කරන්න 👇:\nClick the link below:`;
     try {
       if (navigator.share) {
         await navigator.share({ title: shareTitle, text: shareText, url: cardUrl });
@@ -413,4 +418,4 @@ export default function CardMaker() {
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
     </div>
   );
-}
+} 

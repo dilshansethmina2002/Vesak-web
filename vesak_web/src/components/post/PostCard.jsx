@@ -77,7 +77,7 @@ export default function PostCard({ post, onDelete }) {
     setTimeout(() => setShowLotusAnimation(false), 1000);
   };
 
-  const handleDelete = () => {
+  const handleDelete = (event) => {
     // Stop the card from flipping when you click the trash icon
     event?.stopPropagation();
 
@@ -167,17 +167,7 @@ export default function PostCard({ post, onDelete }) {
 
   const handleShare = () => {
     const url = `${window.location.origin}/card/${post.id}`;
-    const text = encodeURIComponent(`සුබ වෙසක් මංගලයක් වේවා🪷
-
-      තැපෑලෙන් එන වෙසක් කාඩ් එකක සුවඳ දැන් නැති වුණත්, ඒ සුන්දරත්වය අලුත්ම විදිහකට ඔයාට ගේන්න මම හිතුවා... 🥺
-
-      මේක ඩිජිටල් වුණත්, මගේ සුබ පැතුම නම් හදවතින්මයි! ✨
-
-      Happy Vesak🌕
-      Wishing you joy, peace, and good health! 🙏
-
-      මගේ ඩිජිටල් වෙසක් කාඩ් එක බලන්න පහළ ලින්ක් එක open කරන්න 👇:
-      Click the link below: \n${url}`);
+    const text = encodeURIComponent(`සුබ වෙසක් මංගලයක් වේවා🪷\n\nතැපෑලෙන් එන වෙසක් කාඩ් එකක සුවඳ දැන් නැති වුණත්, ඒ සුන්දරත්වය අලුත්ම විදිහකට ඔයාට ගේන්න මම හිතුවා... 🥺\n\nමේක ඩිජිටල් වුණත්, මගේ සුබ පැතුම නම් හදවතින්මයි! ✨\n\nHappy Vesak🌕\nWishing you joy, peace, and good health! 🙏\n\nමගේ ඩිජිටල් වෙසක් කාඩ් එක බලන්න පහළ ලින්ක් එක open කරන්න 👇:\nClick the link below: \n${url}`);
     window.open(`https://wa.me/?text=${text}`, '_blank');
   };
 
@@ -217,23 +207,24 @@ export default function PostCard({ post, onDelete }) {
         onClick={() => setIsFlipped(!isFlipped)}
         onDoubleClick={handleDoubleTap}
       >
-        {/* Ultra-Glass Animated Tap Indicator */}
-        <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 pointer-events-none ${isFlipped ? 'opacity-0 translate-y-4 scale-95' : 'opacity-100 translate-y-0 scale-100'
+        {/* Ultra-Glass Animated Tap Indicator - FULLY RESPONSIVE */}
+        <div className={`absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 pointer-events-none w-max max-w-[90%] ${isFlipped ? 'opacity-0 translate-y-4 scale-95' : 'opacity-100 translate-y-0 scale-100'
           }`}>
 
           {/* Subtle ambient glow behind the glass */}
           <div className="absolute inset-0 bg-orange-500/20 blur-xl rounded-full pointer-events-none" />
 
           {/* The true glassmorphism pill */}
-          <div className="relative flex items-center gap-3 bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] px-6 py-3 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36),inset_0_1px_2px_rgba(255,255,255,0.2)] border border-white/10">
+          <div className="relative flex items-center justify-center gap-2 sm:gap-3 bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] px-5 sm:px-6 py-2.5 sm:py-3 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36),inset_0_1px_2px_rgba(255,255,255,0.2)] border border-white/10">
 
-            {/* The giant radar ping */}
-            <div className="relative flex items-center justify-center">
-              <span className="absolute inline-flex w-10 h-10 rounded-full bg-orange-500 opacity-40 animate-ping" />
-              <RotateCw className="relative inline-flex w-5 h-5 text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+            {/* The giant radar ping & icon */}
+            <div className="relative flex items-center justify-center shrink-0">
+              <span className="absolute inline-flex w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-500 opacity-40 animate-ping" />
+              <RotateCw className="relative inline-flex w-4 h-4 sm:w-5 sm:h-5 text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
             </div>
 
-            <span className="text-sm font-bold tracking-widest text-white uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            {/* Added whitespace-nowrap here! */}
+            <span className="text-xs sm:text-sm font-bold tracking-widest text-white uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap">
               Tap to Flip
             </span>
 
