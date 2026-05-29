@@ -7,6 +7,7 @@ import CreatePost from './pages/CreatePost';
 import ViewCard from './pages/ViewCard';
 import VesakZone from "./pages/VesakZone";
 import AdminDashboard from "./pages/AdminDashboard";
+import { Analytics } from "@vercel/analytics/next";
 
 function App() {
   return (
@@ -22,7 +23,10 @@ function App() {
           <Route path="card/:id" element={<ViewCard />} />
         </Route>
       </Routes>
+      <Analytics />
     </BrowserRouter>
+    
+
   );
 }
 
