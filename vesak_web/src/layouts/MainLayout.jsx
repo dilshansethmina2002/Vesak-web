@@ -91,7 +91,7 @@ export default function MainLayout() {
           
           <div className="hidden md:block absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out" />
 
-          {/* Mobile Header */}
+          {/* Mobile Header (Hidden on Desktop) */}
           <header className="md:hidden flex items-center justify-between p-4 border-b border-white/10 sticky top-0 bg-black/40 backdrop-blur-[40px] saturate-200 z-40">
             <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300">සඳකඩ</h1>
             
@@ -113,23 +113,23 @@ export default function MainLayout() {
             )}
           </header>
 
-          {/* NEW: Mobile "Create Post" Section (Facebook Style) - Only visible on Feed */}
+          {/* UPDATED: "Create Post" Section (Facebook Style) - Visible on ALL devices for the Feed */}
           {isActive('/') && (
-            <div className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-white/10 bg-black/20 backdrop-blur-md">
+            <div className="flex items-center gap-3 px-4 py-3 md:px-6 md:py-5 border-b border-white/10 bg-black/20 md:bg-white/[0.02] backdrop-blur-md transition-colors z-30">
               
               {/* Avatar Profile Picture */}
               {user ? (
-                <Link to="/profile" className="shrink-0">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-500 to-yellow-400 flex items-center justify-center shadow-inner border border-white/20">
-                    <span className="text-white font-bold text-sm">
+                <Link to="/profile" className="shrink-0 group/avatar">
+                  <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-tr from-orange-500 to-yellow-400 flex items-center justify-center shadow-inner border border-white/20 group-hover/avatar:scale-105 transition-transform">
+                    <span className="text-white font-bold text-sm md:text-base">
                       {(user.user_metadata?.full_name || user.email || "U").charAt(0).toUpperCase()}
                     </span>
                   </div>
                 </Link>
               ) : (
-                <button onClick={() => setShowLogin(true)} className="shrink-0">
-                  <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center border border-white/10">
-                    <User className="w-5 h-5 text-neutral-400" />
+                <button onClick={() => setShowLogin(true)} className="shrink-0 hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-neutral-800 flex items-center justify-center border border-white/10">
+                    <User className="w-5 h-5 md:w-6 md:h-6 text-neutral-400" />
                   </div>
                 </button>
               )}
@@ -137,7 +137,7 @@ export default function MainLayout() {
               {/* The "What's on your mind?" Input Bar */}
               <Link
                 to="/share"
-                className="flex-1 bg-white/[0.05] border border-white/10 rounded-full px-4 py-2.5 text-sm text-neutral-400 transition-colors active:bg-white/[0.08] flex items-center"
+                className="flex-1 bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 rounded-full px-4 py-2.5 md:py-3 text-sm md:text-base text-neutral-400 transition-colors flex items-center shadow-inner"
               >
                 Share a Vesak photo...
               </Link>
@@ -145,9 +145,9 @@ export default function MainLayout() {
               {/* Photo Upload Icon */}
               <Link
                 to="/share"
-                className="p-2 text-green-400 hover:text-green-300 transition-colors shrink-0 flex flex-col items-center"
+                className="p-2 md:p-3 text-green-400 hover:text-green-300 hover:bg-green-400/10 rounded-full transition-all shrink-0 flex items-center justify-center"
               >
-                <ImageIcon className="w-6 h-6" />
+                <ImageIcon className="w-6 h-6 md:w-7 md:h-7" />
               </Link>
             </div>
           )}
