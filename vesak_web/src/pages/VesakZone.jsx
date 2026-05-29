@@ -42,7 +42,7 @@ export default function VesakZone() {
 
         {/* The External Link */}
         <iframe
-          src="https://kusa-jathakaya-thorana.vercel.app/index.html"
+          src="https://codecraft-thorana.vercel.app/index.html"
           title="Digital Vesak Thorana"
           className="absolute inset-0 z-10 h-full w-full border-none"
           allowFullScreen 
@@ -61,7 +61,7 @@ export default function VesakZone() {
           * හොඳම අත්දැකීම සඳහා දුරකථනය හරවන්න (Landscape)
         </p>
         <a 
-          href="https://vesak-card-codecraft.vercel.app/" 
+          href="https://codecraft-thorana.vercel.app/index.html" 
           target="_blank" 
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center rounded-full border border-orange-500/50 bg-orange-500/10 px-6 py-2.5 text-sm font-bold text-orange-400 shadow-[0_0_15px_rgba(234,179,8,0.2)] transition-all hover:bg-orange-500 hover:text-white active:scale-95"
