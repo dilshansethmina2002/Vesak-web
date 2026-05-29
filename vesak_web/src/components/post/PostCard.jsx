@@ -30,7 +30,7 @@ export default function PostCard({ post, onDelete }) {
         .from('comments')
         .select('*', { count: 'exact', head: true })
         .eq('card_id', post.id);
-
+        
       if (count !== null) setCommentCount(count);
     }
     fetchCommentCount();
@@ -60,7 +60,7 @@ export default function PostCard({ post, onDelete }) {
       if (error) throw error;
     } catch (error) {
       console.error("Error updating like:", error);
-      setLikedBy(likedBy);
+      setLikedBy(likedBy); 
     }
   };
 
@@ -70,16 +70,16 @@ export default function PostCard({ post, onDelete }) {
       showAlert("Authentication Required", "Please log in to like cards!", true);
       return;
     }
-
+    
     if (!isLiked) handleLike();
-
+    
     setShowLotusAnimation(true);
     setTimeout(() => setShowLotusAnimation(false), 1000);
   };
 
-  const handleDelete = (event) => {
+ const handleDelete = () => {
     // Stop the card from flipping when you click the trash icon
-    event?.stopPropagation();
+    event?.stopPropagation(); 
 
     // Use our beautiful new confirmation alert
     showAlert(
@@ -96,7 +96,7 @@ export default function PostCard({ post, onDelete }) {
             .eq("user_id", user.id);
 
           if (error) throw error;
-
+          
           if (onDelete) {
             onDelete(post.id);
           } else {
@@ -116,7 +116,7 @@ export default function PostCard({ post, onDelete }) {
   // ==========================================
   const toggleComments = async () => {
     setShowComments(!showComments);
-
+    
     if (!showComments && comments.length === 0) {
       setLoadingComments(true);
       const { data, error } = await supabase
@@ -154,10 +154,10 @@ export default function PostCard({ post, onDelete }) {
         .single();
 
       if (error) throw error;
-
+      
       setComments([...comments, data]);
       setCommentCount((prev) => prev + 1);
-      setNewComment("");
+      setNewComment(""); 
     } catch (error) {
       console.error("Error posting comment:", error);
     } finally {
@@ -167,13 +167,23 @@ export default function PostCard({ post, onDelete }) {
 
   const handleShare = () => {
     const url = `${window.location.origin}/card/${post.id}`;
-    const text = encodeURIComponent(`සුබ වෙසක් මංගලයක් වේවා🪷\n\nතැපෑලෙන් එන වෙසක් කාඩ් එකක සුවඳ දැන් නැති වුණත්, ඒ සුන්දරත්වය අලුත්ම විදිහකට ඔයාට ගේන්න මම හිතුවා... 🥺\n\nමේක ඩිජිටල් වුණත්, මගේ සුබ පැතුම නම් හදවතින්මයි! ✨\n\nHappy Vesak🌕\nWishing you joy, peace, and good health! 🙏\n\nමගේ ඩිජිටල් වෙසක් කාඩ් එක බලන්න පහළ ලින්ක් එක open කරන්න 👇:\nClick the link below: \n${url}`);
+    const text = encodeURIComponent(`සුබ වෙසක් මංගලයක් වේවා🪷
+
+      තැපෑලෙන් එන වෙසක් කාඩ් එකක සුවඳ දැන් නැති වුණත්, ඒ සුන්දරත්වය අලුත්ම විදිහකට ඔයාට ගේන්න මම හිතුවා... 🥺
+
+      මේක ඩිජිටල් වුණත්, මගේ සුබ පැතුම නම් හදවතින්මයි! ✨
+
+      Happy Vesak,🌕
+      Wishing you joy, peace, and good health! 🙏
+
+      මගේ ඩිජිටල් වෙසක් කාඩ් එක බලන්න පහළ ලින්ක් එක open කරන්න 👇:
+      Click the link below: \n${url}`);
     window.open(`https://wa.me/?text=${text}`, '_blank');
   };
 
   return (
     <div className="bg-neutral-900/50 border border-white/10 rounded-2xl overflow-hidden mb-8 shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-
+      
       {/* 1. Header */}
       <div className="p-4 flex items-center gap-3">
         <div className="w-10 h-10 bg-gradient-to-tr from-orange-500 to-yellow-400 rounded-full flex items-center justify-center shadow-lg shrink-0">
@@ -189,9 +199,9 @@ export default function PostCard({ post, onDelete }) {
             {new Date(post.created_at).toLocaleDateString()}
           </p>
         </div>
-
+        
         {user?.id === post.user_id && (
-          <button
+          <button 
             onClick={handleDelete}
             className="p-2 text-neutral-500 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors shrink-0"
             title="Delete Post"
@@ -202,29 +212,29 @@ export default function PostCard({ post, onDelete }) {
       </div>
 
       {/* 2. THE 3D FLIP CARD */}
-      <div
+      <div 
         className="w-full aspect-[4/5] relative [perspective:1000px] select-none cursor-pointer group bg-neutral-950"
         onClick={() => setIsFlipped(!isFlipped)}
         onDoubleClick={handleDoubleTap}
       >
-        {/* Ultra-Glass Animated Tap Indicator - FULLY RESPONSIVE */}
-        <div className={`absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 pointer-events-none w-max max-w-[90%] ${isFlipped ? 'opacity-0 translate-y-4 scale-95' : 'opacity-100 translate-y-0 scale-100'
-          }`}>
-
+       {/* Ultra-Glass Animated Tap Indicator */}
+        <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 pointer-events-none ${
+          isFlipped ? 'opacity-0 translate-y-4 scale-95' : 'opacity-100 translate-y-0 scale-100'
+        }`}>
+          
           {/* Subtle ambient glow behind the glass */}
           <div className="absolute inset-0 bg-orange-500/20 blur-xl rounded-full pointer-events-none" />
-
+          
           {/* The true glassmorphism pill */}
-          <div className="relative flex items-center justify-center gap-2 sm:gap-3 bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] px-5 sm:px-6 py-2.5 sm:py-3 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36),inset_0_1px_2px_rgba(255,255,255,0.2)] border border-white/10">
-
-            {/* The giant radar ping & icon */}
-            <div className="relative flex items-center justify-center shrink-0">
-              <span className="absolute inline-flex w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-500 opacity-40 animate-ping" />
-              <RotateCw className="relative inline-flex w-4 h-4 sm:w-5 sm:h-5 text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+          <div className="relative flex items-center gap-3 bg-white/[0.08] backdrop-blur-[40px] saturate-[2.5] px-6 py-3 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36),inset_0_1px_2px_rgba(255,255,255,0.2)] border border-white/10">
+            
+            {/* The giant radar ping */}
+            <div className="relative flex items-center justify-center">
+              <span className="absolute inline-flex w-10 h-10 rounded-full bg-orange-500 opacity-40 animate-ping" />
+              <RotateCw className="relative inline-flex w-5 h-5 text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
             </div>
-
-            {/* Added whitespace-nowrap here! */}
-            <span className="text-xs sm:text-sm font-bold tracking-widest text-white uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap">
+            
+            <span className="text-sm font-bold tracking-widest text-white uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               Tap to Flip
             </span>
 
@@ -240,14 +250,14 @@ export default function PostCard({ post, onDelete }) {
 
         {/* The 3D Wrapper */}
         <div className={`relative w-full h-full transition-all duration-700 ease-in-out [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}>
-
+          
           {/* ---- FRONT FACE ---- */}
           <div className="absolute inset-0 [backface-visibility:hidden] bg-neutral-800 border-y border-white/5">
-            <img
-              src={post.bg_url}
-              alt="Vesak Card"
+            <img 
+              src={post.bg_url} 
+              alt="Vesak Card" 
               className="absolute inset-0 w-full h-full object-cover"
-              onError={(e) => { e.target.style.display = 'none'; }}
+              onError={(e) => { e.target.style.display = 'none'; }} 
             />
           </div>
 
@@ -262,7 +272,7 @@ export default function PostCard({ post, onDelete }) {
                 {post.to_name || "Everyone"}
               </div>
               <div className="w-14 h-16 shrink-0 border-2 border-dashed border-neutral-400/60 flex items-center justify-center p-1">
-                <span className="text-[10px] text-neutral-400/80 font-medium uppercase tracking-widest rotate-12 text-center">Stamp<br />Here</span>
+                <span className="text-[10px] text-neutral-400/80 font-medium uppercase tracking-widest rotate-12 text-center">Stamp<br/>Here</span>
               </div>
             </div>
 
@@ -282,15 +292,15 @@ export default function PostCard({ post, onDelete }) {
 
       {/* 3. Footer Actions */}
       <div className="p-4 flex items-center gap-5">
-        <button
-          onClick={handleLike}
+        <button 
+          onClick={handleLike} 
           className="flex items-center gap-2 text-neutral-400 hover:text-orange-500 transition-colors group"
         >
           <Flower2 className={`w-6 h-6 transition-all active:scale-90 ${isLiked ? "fill-orange-500 text-orange-500 drop-shadow-[0_0_10px_rgba(249,115,22,0.6)]" : "group-hover:text-orange-500"}`} />
           <span className="text-sm font-medium">{likedBy.length > 0 && likedBy.length}</span>
         </button>
-
-        <button
+        
+        <button 
           onClick={toggleComments}
           className={`flex items-center gap-2 transition-colors group ${showComments ? "text-orange-500" : "text-neutral-400 hover:text-orange-500"}`}
         >
@@ -298,7 +308,7 @@ export default function PostCard({ post, onDelete }) {
           <span className="text-sm font-medium">{commentCount > 0 && commentCount}</span>
         </button>
 
-        <button
+        <button 
           onClick={handleShare}
           className="flex items-center gap-2 text-neutral-400 hover:text-green-500 transition-colors group ml-auto"
         >
@@ -310,7 +320,7 @@ export default function PostCard({ post, onDelete }) {
       {showComments && (
         <div className="px-4 pb-4 animate-in slide-in-from-top-2 fade-in duration-200">
           <div className="h-px w-full bg-white/10 mb-4" />
-
+          
           <div className="max-h-48 overflow-y-auto hide-scrollbar flex flex-col gap-3 mb-4">
             {loadingComments ? (
               <Loader2 className="w-5 h-5 animate-spin text-orange-500 mx-auto my-2" />
@@ -327,15 +337,15 @@ export default function PostCard({ post, onDelete }) {
           </div>
 
           <form onSubmit={submitComment} className="flex items-center gap-2">
-            <input
+            <input 
               type="text"
               placeholder="Add a comment..."
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               className="flex-1 bg-neutral-950 border border-white/10 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-orange-500 transition-colors placeholder:text-neutral-600"
             />
-            <button
-              type="submit"
+            <button 
+              type="submit" 
               disabled={isSubmitting || !newComment.trim()}
               className="p-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 disabled:opacity-50 transition-colors shrink-0"
             >
