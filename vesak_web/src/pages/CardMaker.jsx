@@ -55,11 +55,11 @@ const TEMPLATES = [
 
 export default function CardMaker() {
   const { user } = useAuth();
-  const { showAlert } = useAlert(); 
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [selectedBg, setSelectedBg] = useState(TEMPLATES[0]);
-  
+
   const [isFlipped, setIsFlipped] = useState(false);
   const [toName, setToName] = useState("");
   const [message, setMessage] = useState(PRESET_MESSAGES[0]);
@@ -85,8 +85,8 @@ export default function CardMaker() {
 
     // 3. The Magical Typing Effect
     let i = 0;
-    setIsFlipped(true); 
-    
+    setIsFlipped(true);
+
     const typeInterval = setInterval(() => {
       setMessage(selectedWish.slice(0, i + 1));
       i++;
@@ -94,7 +94,7 @@ export default function CardMaker() {
         clearInterval(typeInterval);
         setIsGenerating(false);
       }
-    }, 25); 
+    }, 25);
   };
 
   // ==========================================
@@ -112,12 +112,12 @@ export default function CardMaker() {
 
       const { data, error } = await supabase
         .from('vesak_cards')
-        .insert([{ 
-          message: message, 
-          bg_url: selectedBg, 
+        .insert([{
+          message: message,
+          bg_url: selectedBg,
           user_id: user.id,
-          author_name: finalFromName, 
-          to_name: toName,         
+          author_name: finalFromName,
+          to_name: toName,
           from_name: finalFromName,
           is_public: false // Hardcoded to FALSE so these never hit the public feed!
         }])
@@ -125,8 +125,8 @@ export default function CardMaker() {
         .single();
 
       if (error) throw error;
-      return data; 
-      
+      return data;
+
     } catch (error) {
       console.error(error);
       showAlert("Crafting Failed", "We couldn't save your card right now. Please try again.");
@@ -140,13 +140,21 @@ export default function CardMaker() {
   // THE SINGLE ACTION BUTTON
   // ==========================================
   const handleShare = async () => {
-    const savedCard = await saveCardToDatabase(); 
-    if (!savedCard) return; 
+    const savedCard = await saveCardToDatabase();
+    if (!savedCard) return;
 
     const cardUrl = `${window.location.origin}/card/${savedCard.id}`;
     const shareTitle = `Vesak Greeting from ${savedCard.from_name}`;
-    const shareText = `මම ඔයාට ලස්සන වෙසක් පතක් හැදුවා! මෙතනින් බලන්න: `;
+    const shareText = `සුබ වෙසක් මංගලයක් වේවා ${toName}! 🪷
 
+      තැපෑලෙන් එන වෙසක් කාඩ් එකක සුවඳ දැන් නැති වුණත්, ඒ සුන්දරත්වය අලුත්ම විදිහකට ඔයාට ගේන්න මම හිතුවා... 🥺
+      මේක ඩිජිටල් වුණත්, මගේ සුබ පැතුම නම් හදවතින්මයි! ✨
+
+      Happy Vesak, ${toName}! 🌕
+      Wishing you joy, peace, and good health! 🙏
+
+      මගේ ඩිජිටල් වෙසක් කාඩ් එක බලන්න පහළ ලින්ක් එක open කරන්න 👇:
+      Click the link below:`;
     try {
       if (navigator.share) {
         await navigator.share({ title: shareTitle, text: shareText, url: cardUrl });
@@ -159,14 +167,14 @@ export default function CardMaker() {
       console.log("Share menu closed by user.");
       showAlert("Card Saved!", "Your private card is ready.");
     }
-    
+
     // Send them directly to view the stunning card they just made
     navigate(`/card/${savedCard.id}`);
   };
 
   return (
     <div className="max-w-md mx-auto flex flex-col animate-in fade-in slide-in-from-bottom-8 duration-700 pb-32">
-      
+
       {/* =========================================
           0. NEW UI: PAGE HEADER
           ========================================= */}
@@ -186,7 +194,7 @@ export default function CardMaker() {
         {/* =========================================
             1. THE 3D FLIP CARD PREVIEW
             ========================================= */}
-        <div 
+        <div
           className="w-full aspect-[4/5] relative [perspective:1000px] cursor-pointer group"
           onClick={() => setIsFlipped(!isFlipped)}
         >
@@ -194,9 +202,8 @@ export default function CardMaker() {
           <div className="absolute inset-0 bg-orange-500/10 blur-[60px] rounded-full pointer-events-none" />
 
           {/* Tap Indicator */}
-          <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 pointer-events-none ${
-            isFlipped ? 'opacity-0 translate-y-4 scale-95' : 'opacity-100 translate-y-0 scale-100'
-          }`}>
+          <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 pointer-events-none ${isFlipped ? 'opacity-0 translate-y-4 scale-95' : 'opacity-100 translate-y-0 scale-100'
+            }`}>
             <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 shadow-2xl">
               <RotateCw className="w-4 h-4 text-orange-400 animate-pulse" />
               <span className="text-xs font-bold tracking-widest text-white uppercase">Tap to Flip</span>
@@ -205,14 +212,14 @@ export default function CardMaker() {
 
           {/* The 3D Wrapper */}
           <div className={`relative w-full h-full transition-all duration-700 ease-in-out [transform-style:preserve-3d] shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-3xl ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}>
-            
+
             {/* FRONT FACE */}
             <div className="absolute inset-0 [backface-visibility:hidden] rounded-3xl overflow-hidden border border-white/10 bg-neutral-900">
-              <img 
-                src={selectedBg} 
-                alt="Card Front" 
+              <img
+                src={selectedBg}
+                alt="Card Front"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                onError={(e) => { e.target.style.display = 'none'; }} 
+                onError={(e) => { e.target.style.display = 'none'; }}
               />
             </div>
 
@@ -243,26 +250,26 @@ export default function CardMaker() {
             2. THE STUDIO CONTROLS
             ========================================= */}
         <div className="flex flex-col gap-8">
-          
+
           {/* Artwork Strip (Large Thumbnails Edition) */}
           <div className="flex flex-col gap-4 w-full sm:px-8 relative">
-            
+
             {/* Header & Mobile Swipe Instruction */}
             <div className="flex items-center justify-between px-2 sm:px-0">
               <label className="text-[10px] sm:text-xs text-neutral-400 font-bold flex items-center gap-2 tracking-widest uppercase">
                 <ImageIcon className="w-4 h-4 text-orange-400" /> Choose Artwork
               </label>
-              
+
               <span className="text-[10px] text-orange-500/80 font-bold tracking-widest uppercase flex items-center gap-1 animate-pulse sm:hidden">
                 Swipe <span className="text-sm leading-none">&rarr;</span>
               </span>
             </div>
-            
+
             {/* The Carousel */}
             <Carousel
               opts={{
                 align: "start",
-                dragFree: true, 
+                dragFree: true,
               }}
               className="w-full"
             >
@@ -272,20 +279,19 @@ export default function CardMaker() {
                     <button
                       onClick={() => {
                         setSelectedBg(bgPath);
-                        setIsFlipped(false); 
+                        setIsFlipped(false);
                       }}
-                      className={`w-full aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-300 ${
-                        selectedBg === bgPath 
-                          ? "border-orange-500 scale-100 shadow-[0_0_20px_rgba(249,115,22,0.4)] z-10 ring-4 ring-orange-500/20" 
-                          : "border-transparent opacity-60 hover:opacity-100 hover:scale-[0.98] scale-95"
-                      }`}
+                      className={`w-full aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-300 ${selectedBg === bgPath
+                        ? "border-orange-500 scale-100 shadow-[0_0_20px_rgba(249,115,22,0.4)] z-10 ring-4 ring-orange-500/20"
+                        : "border-transparent opacity-60 hover:opacity-100 hover:scale-[0.98] scale-95"
+                        }`}
                     >
                       <img src={bgPath} alt={`Template ${idx}`} className="w-full h-full object-cover bg-neutral-900" />
                     </button>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              
+
               {/* Desktop Navigation Arrows */}
               <CarouselPrevious className="hidden sm:flex -left-4 border-white/10 bg-neutral-950/80 text-white hover:bg-black hover:text-orange-400" />
               <CarouselNext className="hidden sm:flex -right-4 border-white/10 bg-neutral-950/80 text-white hover:bg-black hover:text-orange-400" />
@@ -304,7 +310,7 @@ export default function CardMaker() {
                   type="text"
                   value={toName}
                   onChange={(e) => setToName(e.target.value)}
-                  onFocus={() => setIsFlipped(true)} 
+                  onFocus={() => setIsFlipped(true)}
                   className="w-full rounded-2xl bg-white/[0.03] border border-white/10 pl-11 pr-4 py-4 text-sm text-white focus:outline-none focus:border-orange-500/50 focus:bg-white/[0.05] transition-all placeholder:text-neutral-600 shadow-inner"
                   placeholder="To (e.g. Mom)"
                 />
@@ -318,7 +324,7 @@ export default function CardMaker() {
                   type="text"
                   value={fromName}
                   onChange={(e) => setFromName(e.target.value)}
-                  onFocus={() => setIsFlipped(true)} 
+                  onFocus={() => setIsFlipped(true)}
                   className="w-full rounded-2xl bg-white/[0.03] border border-white/10 pl-11 pr-4 py-4 text-sm text-white focus:outline-none focus:border-orange-500/50 focus:bg-white/[0.05] transition-all placeholder:text-neutral-600 shadow-inner"
                   placeholder="From (You)"
                 />
@@ -329,11 +335,11 @@ export default function CardMaker() {
               <div className="absolute top-4 left-0 pl-4 pointer-events-none">
                 <PenLine className="w-4 h-4 text-neutral-500 group-focus-within:text-orange-400 transition-colors" />
               </div>
-              
+
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onFocus={() => setIsFlipped(true)} 
+                onFocus={() => setIsFlipped(true)}
                 rows={4}
                 className="w-full resize-none rounded-2xl bg-white/[0.03] border border-white/10 pl-11 pr-32 py-4 text-sm text-white focus:outline-none focus:border-orange-500/50 focus:bg-white/[0.05] transition-all placeholder:text-neutral-600 shadow-inner"
                 placeholder="Write your beautiful wish here..."
@@ -341,28 +347,26 @@ export default function CardMaker() {
 
               {/* Ultra-Premium AI Controls (Language Toggle + Sparkles) */}
               <div className="absolute top-3 right-3 flex items-center gap-1.5 p-1 rounded-xl bg-black/40 backdrop-blur-md border border-white/5 shadow-lg">
-                
+
                 {/* Language Toggle Switch */}
                 <div className="flex items-center bg-white/5 rounded-lg p-0.5">
                   <button
                     onClick={() => setAiLanguage("EN")}
                     disabled={isGenerating}
-                    className={`px-2 py-1.5 text-[10px] font-bold rounded-md transition-all ${
-                      aiLanguage === "EN" 
-                        ? 'bg-orange-500/80 text-white shadow-sm' 
-                        : 'text-neutral-400 hover:text-white'
-                    }`}
+                    className={`px-2 py-1.5 text-[10px] font-bold rounded-md transition-all ${aiLanguage === "EN"
+                      ? 'bg-orange-500/80 text-white shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                      }`}
                   >
                     EN
                   </button>
                   <button
                     onClick={() => setAiLanguage("SIN")}
                     disabled={isGenerating}
-                    className={`px-2 py-1.5 text-[10px] font-bold rounded-md transition-all ${
-                      aiLanguage === "SIN" 
-                        ? 'bg-orange-500/80 text-white shadow-sm' 
-                        : 'text-neutral-400 hover:text-white'
-                    }`}
+                    className={`px-2 py-1.5 text-[10px] font-bold rounded-md transition-all ${aiLanguage === "SIN"
+                      ? 'bg-orange-500/80 text-white shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                      }`}
                   >
                     සිං
                   </button>
@@ -373,16 +377,15 @@ export default function CardMaker() {
                   onClick={handleGenerateWish}
                   disabled={isGenerating}
                   title="Weave a Wish"
-                  className={`p-2 rounded-lg transition-all duration-300 flex items-center justify-center ${
-                    isGenerating 
-                      ? 'text-orange-400 cursor-wait' 
-                      : 'text-neutral-300 hover:text-orange-400 hover:bg-orange-500/20 active:scale-95'
-                  }`}
+                  className={`p-2 rounded-lg transition-all duration-300 flex items-center justify-center ${isGenerating
+                    ? 'text-orange-400 cursor-wait'
+                    : 'text-neutral-300 hover:text-orange-400 hover:bg-orange-500/20 active:scale-95'
+                    }`}
                 >
                   <Sparkles className={`w-4 h-4 ${isGenerating ? 'animate-pulse' : ''}`} />
                 </button>
               </div>
-              
+
               {/* AI Loading Text */}
               {isGenerating && (
                 <div className="absolute bottom-3 right-4 text-[10px] font-bold text-orange-500/70 tracking-widest uppercase animate-pulse">

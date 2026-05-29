@@ -7,7 +7,7 @@ import CreatePost from './pages/CreatePost';
 import ViewCard from './pages/ViewCard';
 import VesakZone from "./pages/VesakZone";
 import AdminDashboard from "./pages/AdminDashboard";
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   return (
