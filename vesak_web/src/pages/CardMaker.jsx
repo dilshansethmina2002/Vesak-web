@@ -49,7 +49,7 @@ const SINHALA_WISHES = [
 // ==========================================
 const RAW_TEMPLATES = [
   "/cards/vesak9.webp", "/cards/vesak12.webp", "/cards/vesak13.webp", "/cards/vesak8.webp",
-  "/cards/vesak5.webp", "/cards/vesak10.webp", "/cards/vesak11.webp", "/cards/vesak6.webp",
+  "/cards/vesak5.webp", "/cards/vesak10.webp", "/cards/vesak6.webp",
   "/cards/vesak7.webp", "/cards/vesak14.webp", "/cards/vesak15.webp", "/cards/vesak16.webp", "/cards/vesak18.webp", "/cards/vesak19.webp", "/cards/vesak20.webp",
   "/cards/vesak21.webp", "/cards/vesak22.webp", "/cards/vesak23.webp", "/cards/vesak24.webp",
   "/cards/vesak25.webp", "/cards/vesak26.webp", "/cards/vesak27.webp", "/cards/vesak28.webp"
