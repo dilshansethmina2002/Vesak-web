@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ImagePlus, X, Loader2, UploadCloud } from "lucide-react";
+import { ImagePlus, X, Loader2, UploadCloud, LogIn } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/AuthContext";
 import { useAlert } from "../context/AlertContext";
 
 export default function CreatePost() {
+  // Always call hooks at the top level
   const { user } = useAuth();
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -23,24 +24,22 @@ export default function CreatePost() {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.readAsDataURL(imageFile);
-      
+
       reader.onload = (event) => {
         const img = new Image();
         img.src = event.target.result;
-        
+
         img.onload = () => {
           const canvas = document.createElement("canvas");
-          // Max width of 1080px (Instagram standard)
           const MAX_WIDTH = 1080;
           const scaleSize = MAX_WIDTH / img.width;
-          
+
           canvas.width = MAX_WIDTH;
           canvas.height = img.height * scaleSize;
 
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          // Compress to JPEG with 0.7 quality (Usually ~100kb - 200kb)
           canvas.toBlob((blob) => {
             const compressedFile = new File([blob], imageFile.name, {
               type: "image/jpeg",
@@ -65,10 +64,7 @@ export default function CreatePost() {
       return;
     }
 
-    // Show immediate preview
     setPreviewUrl(URL.createObjectURL(selectedFile));
-    
-    // Compress it in the background
     const compressed = await compressImage(selectedFile);
     setFile(compressed);
   };
@@ -83,10 +79,6 @@ export default function CreatePost() {
   // 3. UPLOAD TO SUPABASE
   // ==========================================
   const handleShare = async () => {
-    if (!user) {
-      showAlert("Authentication Required", "Please log in to share photos!", true);
-      return;
-    }
     if (!file) {
       showAlert("Missing Photo", "Please select a photo to share.");
       return;
@@ -109,14 +101,15 @@ export default function CreatePost() {
         .from('vesak_media')
         .getPublicUrl(fileName);
 
-      // 3. Save it as a post in your existing feed table!
+      // 3. Save it as a post in your existing feed table
       const { error: dbError } = await supabase
         .from('vesak_cards')
-        .insert([{ 
-          message: caption, 
-          bg_url: publicUrl, 
+        .insert([{
+          message: caption,
+          bg_url: publicUrl,
           user_id: user.id,
-          author_name: currentName 
+          author_name: currentName,
+          is_public: true // Ensures it shows up on the public feed
         }]);
 
       if (dbError) throw dbError;
@@ -132,6 +125,35 @@ export default function CreatePost() {
     }
   };
 
+  // ==========================================
+  // CONDITIONAL RENDERING: NOT LOGGED IN
+  // ==========================================
+  if (!user) {
+    return (
+      <div className="max-w-md mx-auto pt-10 pb-24 px-4 text-center animate-in fade-in slide-in-from-bottom-4">
+        <div className="w-24 h-24 bg-neutral-900 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(249,115,22,0.15)]">
+          <UploadCloud className="w-10 h-10 text-orange-400" />
+        </div>
+        <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300 mb-3">
+          Login Required
+        </h2>
+        <p className="text-neutral-400 text-sm mb-8 leading-relaxed">
+          You need to be logged in to share your beautiful Vesak photos, lanterns, and decorations with the Sandakada community.
+        </p>
+        <button
+          onClick={() => showAlert("Authentication Required", "Please log in to share photos!", true)}
+          className="w-full py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-400 hover:to-yellow-400 text-black font-bold transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
+        >
+          <LogIn className="w-5 h-5" />
+          Log In to Continue
+        </button>
+      </div>
+    );
+  }
+
+  // ==========================================
+  // CONDITIONAL RENDERING: LOGGED IN (NORMAL FORM)
+  // ==========================================
   return (
     <div className="max-w-md mx-auto pb-24 animate-in fade-in slide-in-from-bottom-4">
       <h2 className="text-2xl font-bold text-white mb-2">Share a Photo</h2>
@@ -139,9 +161,9 @@ export default function CreatePost() {
 
       {/* Image Uploader Area */}
       <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-4 mb-6 relative overflow-hidden">
-        
+
         {!previewUrl ? (
-          <div 
+          <div
             onClick={() => fileInputRef.current?.click()}
             className="w-full aspect-[4/5] bg-neutral-950 border-2 border-dashed border-white/10 hover:border-orange-500/50 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-colors group"
           >
@@ -154,7 +176,7 @@ export default function CreatePost() {
         ) : (
           <div className="w-full aspect-[4/5] relative rounded-2xl overflow-hidden bg-black group">
             <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-            <button 
+            <button
               onClick={clearImage}
               className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 transition-colors opacity-0 group-hover:opacity-100"
             >
@@ -163,12 +185,12 @@ export default function CreatePost() {
           </div>
         )}
 
-        <input 
-          type="file" 
-          ref={fileInputRef} 
-          onChange={handleFileSelect} 
-          accept="image/*" 
-          className="hidden" 
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileSelect}
+          accept="image/*"
+          className="hidden"
         />
       </div>
 
@@ -183,7 +205,7 @@ export default function CreatePost() {
       </div>
 
       {/* Submit Button */}
-      <button 
+      <button
         onClick={handleShare}
         disabled={!file || isUploading}
         className="w-full py-4 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-lg shadow-orange-500/20 active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
