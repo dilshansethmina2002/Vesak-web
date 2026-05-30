@@ -51,9 +51,9 @@ export default function LoginModal({ isOpen, onClose }) {
         throw signUpError; // Throw any other weird signup errors (like rate limits)
       }
 
-      // Success! Close the modal and refresh to apply the session.
+      // Success! Close the modal.
+      // WE DO NOT RELOAD HERE so the user's card data is preserved!
       onClose();
-      window.location.reload(); 
 
     } catch (err) {
       console.error(err);
